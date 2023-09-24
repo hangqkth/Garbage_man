@@ -16,9 +16,8 @@ def set_parameter_requires_grad(model, feature_extracting):
             param.requires_grad = False
 
 
-def train_and_test(train_loader, val_loader, lr, model, epochs, criterion, device):
-    best_loss_train, best_loss_test = float("inf"), float("inf")
-    best_train_result, best_test_result = [], []
+def train_and_val(train_loader, val_loader, lr, model, epochs, criterion, device):
+    best_loss_test = float("inf")
 
     for epoch in range(epochs):
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)  # learning rate, 0.001
@@ -33,10 +32,6 @@ def train_and_test(train_loader, val_loader, lr, model, epochs, criterion, devic
             loss = criterion(pred, label.to(device=device, dtype=torch.long))
             loss.backward()  # backward propagation
             optimizer.step()  # update model parameters
-            # if loss < best_loss_train:
-            #     best_loss_train = loss
-            #     a_pred = a_pred.cpu().detach().numpy()
-            #     best_train_result = [a_pred, label.cpu().detach().numpy(), data.cpu().detach().numpy()]
             if batch % 10 == 0:
                 print("\rTrain Epoch: {:d} | Train loss: {:.4f} | Batch : {}/{}".format(epoch + 1, loss, batch, len(train_loader)))
 
@@ -87,7 +82,7 @@ if __name__ == "__main__":
     criterion = nn.CrossEntropyLoss()
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     model.to(device)
-    train_and_test(train_loader, val_loader, 1e-4, model, 10, criterion, device)
+    train_and_val(train_loader, val_loader, 1e-4, model, 10, criterion, device)
 
 
 
