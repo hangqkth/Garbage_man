@@ -17,3 +17,5 @@ validation set. The model parameter is saved under the saved_model folder.
 After finishing training, run test.py to test the model on test set, you will see the accuracy and 
 confusion matrix.
 
+## Classification result
+![image](https://github.com/hangqkth/Garbage_man/assets/112768477/a49fcc49-90b4-4013-a00a-7493e5f33d15)
