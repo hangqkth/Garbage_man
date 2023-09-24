@@ -16,3 +16,4 @@ Run train.py, the train_and_val function will train the model and validate the p
 validation set. The model parameter is saved under the saved_model folder.
 After finishing training, run test.py to test the model on test set, you will see the accuracy and 
 confusion matrix.
+
