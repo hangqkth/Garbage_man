@@ -18,7 +18,7 @@ def build_label_transform_dict():
     return label_trans_dict
 
 
-def build_dataset(txt_file, dataset):
+def build_dataset(txt_file):
     """
     Processing data according to the txt file
     :param txt_file: 'test.txt', 'train.txt' or 'val.txt'
@@ -37,8 +37,7 @@ def build_dataset(txt_file, dataset):
         if img_data.shape[-1] != 3:
             img_data = np.stack([img_data, img_data, img_data], axis=-1)
         data_list.append(img_data)
-    np.save('./processed_data/'+dataset+'_data.npy', np.stack(data_list, axis=0))
-    np.save('./processed_data/'+dataset+'_label.npy', np.stack(label_list, axis=0))
+    return np.stack(data_list, axis=0), np.stack(label_list, axis=0)
 
 
 class GarbageData(data.Dataset):
@@ -54,11 +53,9 @@ class GarbageData(data.Dataset):
 
 
 if __name__ == "__main__":
-    # build_dataset('./garbage_classification/test.txt', 'test')
-    # train_data = np.load('processed_data/train_data.npy')
-    # val_data = np.load('processed_data/val_data.npy')
-    test_data = np.load('processed_data/test_data.npy')
-    test_label = np.load('processed_data/test_label.npy')
+    test_data, test_label = build_dataset('./garbage_classification/test.txt')
+    # train_data, train_label = build_dataset('./garbage_classification/train.txt')
+    # val_data, val_label = build_dataset('./garbage_classification/val.txt')
     test_dataset = GarbageData(test_data, test_label)
     test_loader = data.DataLoader(dataset=test_dataset, batch_size=64, shuffle=False)
     for img_data, label in test_loader:

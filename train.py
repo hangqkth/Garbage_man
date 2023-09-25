@@ -1,5 +1,5 @@
 import torchvision.models as models
-from load_data import GarbageData
+from load_data import GarbageData, build_dataset
 import torch.nn as nn
 import torch
 import torch.utils.data as data
@@ -72,10 +72,9 @@ if __name__ == "__main__":
         nn.Linear(64, 12))
 
     # set_parameter_requires_grad(model, feature_extract)
-    train_data = np.load('processed_data/train_data.npy')
-    train_label = np.load('processed_data/train_label.npy')
-    val_data = np.load('processed_data/val_data.npy')
-    val_label = np.load('processed_data/val_label.npy')
+    train_data, train_label = build_dataset('./garbage_classification/train.txt')
+    val_data, val_label = build_dataset('./garbage_classification/val.txt')
+
     train_loader = data.DataLoader(dataset=GarbageData(train_data, train_label), batch_size=64, shuffle=True)
     val_loader = data.DataLoader(dataset=GarbageData(val_data, val_label), batch_size=64, shuffle=True)
 

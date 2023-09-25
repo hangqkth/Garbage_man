@@ -1,5 +1,5 @@
 import torchvision.models as models
-from load_data import GarbageData
+from load_data import GarbageData, build_dataset
 import torch.nn as nn
 import torch
 import torch.utils.data as data
@@ -18,8 +18,7 @@ if __name__ == "__main__":
         nn.ReLU(),
         nn.Linear(64, 12))
 
-    test_data = np.load('processed_data/test_data.npy')
-    test_label = np.load('processed_data/test_label.npy')
+    test_data, test_label = build_dataset('./garbage_classification/test.txt')
 
     test_loader = data.DataLoader(dataset=GarbageData(test_data, test_label), batch_size=32, shuffle=True)
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
