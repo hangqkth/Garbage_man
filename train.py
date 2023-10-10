@@ -1,4 +1,4 @@
-import torchvision.models as models
+from model import GarbageNet
 from load_data import GarbageData, build_dataset
 import torch.nn as nn
 import torch
@@ -6,14 +6,6 @@ import torch.utils.data as data
 import time
 import numpy as np
 from sklearn.metrics import accuracy_score
-
-resnet18 = models.resnet18(pretrained=True)
-
-
-def set_parameter_requires_grad(model, feature_extracting):
-    if feature_extracting:
-        for param in model.parameters():
-            param.requires_grad = False
 
 
 def train_and_val(train_loader, val_loader, lr, model, epochs, criterion, device):
@@ -60,28 +52,18 @@ def train_and_val(train_loader, val_loader, lr, model, epochs, criterion, device
 
 
 if __name__ == "__main__":
-    # freeze resnet parameter or not
-    # feature_extract = True
-    # model = models.resnet18(pretrained=True)
-    model = models.resnet34(pretrained=True)
-    num_feature = model.fc.in_features
-    model.fc = nn.Sequential(
-        nn.Linear(num_feature, 64),
-        nn.BatchNorm1d(64),
-        nn.ReLU(),
-        nn.Linear(64, 12))
-
-    # set_parameter_requires_grad(model, feature_extract)
+    model = GarbageNet()
+    print("loading data")
     train_data, train_label = build_dataset('./garbage_classification/train.txt')
     val_data, val_label = build_dataset('./garbage_classification/val.txt')
-
-    train_loader = data.DataLoader(dataset=GarbageData(train_data, train_label), batch_size=64, shuffle=True)
-    val_loader = data.DataLoader(dataset=GarbageData(val_data, val_label), batch_size=64, shuffle=True)
-
+    print("Data loading complete")
+    train_loader = data.DataLoader(dataset=GarbageData(train_data, train_label), batch_size=32, shuffle=True)
+    val_loader = data.DataLoader(dataset=GarbageData(val_data, val_label), batch_size=32, shuffle=True)
     criterion = nn.CrossEntropyLoss()
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     model.to(device)
-    train_and_val(train_loader, val_loader, 1e-4, model, 10, criterion, device)
+    print("start training")
+    train_and_val(train_loader, val_loader, 1e-3, model, 10, criterion, device)
 
 
 

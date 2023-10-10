@@ -1,4 +1,3 @@
-import torchvision.models as models
 from load_data import GarbageData, build_dataset
 import torch.nn as nn
 import torch
@@ -6,11 +5,12 @@ import torch.utils.data as data
 from tqdm import tqdm
 import numpy as np
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from model import GarbageNet
 import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
-    model = models.resnet34(pretrained=False)
+    model = GarbageNet()
     num_feature = model.fc.in_features
     model.fc = nn.Sequential(
         nn.Linear(num_feature, 64),
