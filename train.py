@@ -61,9 +61,13 @@ if __name__ == "__main__":
     val_loader = data.DataLoader(dataset=GarbageData(val_data, val_label), batch_size=32, shuffle=True)
     criterion = nn.CrossEntropyLoss()
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
+    model_param = torch.load('./saved_model/garbage_net.pth')  # keep on training from the existing model
+    model.load_state_dict(model_param)
+
     model.to(device)
     print("start training")
-    train_and_val(train_loader, val_loader, 1e-3, model, 10, criterion, device)
+    train_and_val(train_loader, val_loader, 1e-5, model, 10, criterion, device)
 
 
 

@@ -46,7 +46,7 @@ class GarbageNet(nn.Module):
         x = self.cnn3(x)
         x = self.cnn4(x)
         x = self.cnn5(x)
-        x = x.view(x.shape[0], -1)
+        x = torch.reshape(x, [x.shape[0], -1])
 
         x = self.fc1(x)
         x = self.fc2(x)
@@ -56,9 +56,9 @@ class GarbageNet(nn.Module):
 
 if __name__ == "__main__":
     # test_data, test_label = build_dataset('./garbage_classification/test.txt')
-    train_data, train_label = build_dataset('./garbage_classification/train.txt')
-    # val_data, val_label = build_dataset('./garbage_classification/val.txt')
-    val_dataset = GarbageData(train_data, train_label)
+    # train_data, train_label = build_dataset('./garbage_classification/train.txt')
+    val_data, val_label = build_dataset('./garbage_classification/val.txt')
+    val_dataset = GarbageData(val_data, val_label)
     val_loader = data.DataLoader(dataset=val_dataset, batch_size=32, shuffle=False)
     net = GarbageNet()
     for img_data, label in val_loader:

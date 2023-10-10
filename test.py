@@ -1,22 +1,15 @@
 from load_data import GarbageData, build_dataset
-import torch.nn as nn
 import torch
 import torch.utils.data as data
 from tqdm import tqdm
 import numpy as np
-from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, ConfusionMatrixDisplay
 from model import GarbageNet
 import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
     model = GarbageNet()
-    num_feature = model.fc.in_features
-    model.fc = nn.Sequential(
-        nn.Linear(num_feature, 64),
-        nn.BatchNorm1d(64),
-        nn.ReLU(),
-        nn.Linear(64, 12))
 
     test_data, test_label = build_dataset('./garbage_classification/test.txt')
 
@@ -45,6 +38,7 @@ if __name__ == "__main__":
     disp = ConfusionMatrixDisplay.from_predictions(y_true=true_list, y_pred=pred_list, cmap=plt.cm.Blues,
                                                    xticks_rotation="vertical", display_labels=str_labels)
     plt.title("Test Accuracy: {:.4%} ".format(acc))
+    plt.tight_layout()
     plt.show()
 
 
